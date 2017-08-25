@@ -1,5 +1,4 @@
 require 'httparty'
-require 'uri'
 
 module KlickmailApi
   class Connector
@@ -8,10 +7,7 @@ module KlickmailApi
     DEFAULT_SERVICE = 'http://www.klickmail.com.br/api'
 
     def initialize(service = DEFAULT_SERVICE)
-      uri = URI(service)
       @service = service
-      @host = uri.host
-      @port = get_port(uri.scheme)
     end
 
     def login(username, password)
@@ -36,11 +32,6 @@ module KlickmailApi
     def set_session(data)
       @sessionName = data['sessioName']
       @sessid = data['sessid']
-    end
-
-    def get_port(scheme)
-      return 80 if scheme == 'http'
-      return 443 if scheme == 'https'
     end
 
     def http_request(path, method = 'GET', data = nil)
