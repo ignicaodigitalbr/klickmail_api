@@ -1,5 +1,2 @@
-require "klickmail_api/version"
-
-module KlickmailApi
-  # Your code goes here...
-end
+require 'klickmail_api/version'
+require 'klickmail_api/connector'
