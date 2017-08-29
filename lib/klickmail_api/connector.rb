@@ -14,13 +14,8 @@ module KlickmailApi
       data = { username: username, password: password }
 
       response = http_request('account/login', 'POST', data)
-      
-      if valid_login?(response)
-        set_session(response['result'])
-        return true
-      end
 
-      return false
+      return response['result']
     end
 
     private

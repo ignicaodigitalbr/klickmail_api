@@ -12,8 +12,8 @@ RSpec.describe KlickmailApi::Connector do
         .to_return(status: status, body: response, headers: header)
     end
 
-    context 'when the request is valid' do 
-      let(:response) do 
+    context 'when the request is valid' do
+      let(:response) do
         "<?xml version='1.0' encoding='utf-8'?>
           <result>
             <sessid>sessid</sessid>
@@ -21,24 +21,26 @@ RSpec.describe KlickmailApi::Connector do
           </result>"
       end
       let(:status) { 200 }
-      
+      let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
+
       subject { connector.login('username', 'password') }
 
-      it { is_expected.to be(true) }
+      it { is_expected.to eq(result) }
     end
 
-    context 'when the request is invalid' do 
-      let(:response) do 
+    context 'when the request is invalid' do
+      let(:response) do
         "<?xml version='1.0' encoding='utf-8'?>
           <result>O nome de usuário ou a senha são inválidos.</result>"
       end
       let(:status) { 401 }
+      let(:result) { 'O nome de usuário ou a senha são inválidos.' }
 
       subject { connector.login('wrong_username', 'wrong_password') }
 
-      it { is_expected.to be(false) }
+      it { is_expected.to eq(result) }
     end
   end
 end
 
-   
+
