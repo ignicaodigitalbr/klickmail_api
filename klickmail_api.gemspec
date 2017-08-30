@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "klickmail_api"
   spec.version       = KlickmailApi::VERSION
   spec.authors       = ["Juliane Lima", "Rafael Simão"]
-  spec.email         = ["juliane.lima@klicksite.com.br", "rafael.costa@klicksite.com.br"]
+  spec.email         = ["juliane.lima@klickpages.com.br", "rafael.costa@klickpages.com.br"]
 
   spec.summary       = %q{Wrapper for integration with Klickmail.}
-  spec.description   = %q{See https://github.com/jujulisan/klickmail_api for more information.}
+  spec.description   = %q{See https://github.com/ignicaodigitalbr/klickmail_api for more information.}
   spec.homepage      = "https://github.com/ignicaodigitalbr/klickmail_api"
   spec.license       = "MIT"
 
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 1.15'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'webmock' 
+  spec.add_development_dependency 'webmock'
   spec.add_development_dependency 'rspec'
   spec.add_runtime_dependency 'httparty', '~> 0.15'
   spec.required_ruby_version = '>=2.0.0'
