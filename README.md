@@ -32,7 +32,7 @@ connector = KlickmailApi::Connector.new
 connector = KlickmailApi::Connector.new('https://www.klickmail.com.br/api')
 
 connector.login(username: 'john', password: 'doe')
-# If return is true the login occured succesfully, otherwise if it is false username or password was invalid.
+# The connector will return response message hash, if success the message will have sessid and session_name. Otherwise will return an error message.
 ```
 
 
