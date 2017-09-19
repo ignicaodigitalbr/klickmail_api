@@ -1,10 +1,10 @@
 require "spec_helper"
 require 'webmock/rspec'
 
-RSpec.describe KlickmailApi::Connector do
+RSpec.describe KlickmailApi::Client do
   let(:header) { {'content_type': 'application/xml'} }
   let(:url) { 'http://www.klickmail.com.br/api' }
-  let(:connector) { KlickmailApi::Connector.new }
+  let(:client) { KlickmailApi::Client.new }
 
   describe '#login' do
     before do
@@ -23,7 +23,7 @@ RSpec.describe KlickmailApi::Connector do
       let(:status) { 200 }
       let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
 
-      subject { connector.login('username', 'password') }
+      subject { client.login('username', 'password') }
 
       it { expect(subject['result']).to eq(result) }
     end
@@ -36,15 +36,15 @@ RSpec.describe KlickmailApi::Connector do
       let(:status) { 401 }
       let(:result) { 'O nome de usuário ou a senha são inválidos.' }
 
-      subject { connector.login('wrong_username', 'wrong_password') }
+      subject { client.login('wrong_username', 'wrong_password') }
 
       it { expect(subject['result']).to eq(result) }
     end
   end
 
-  describe '#request' do
+  describe '#index_fields' do
     before do
-      WebMock.stub_request(:post, "#{url}/account/login")
+      WebMock.stub_request(:get, "#{url}/field")
         .to_return(status: status, body: response, headers: header)
     end
 
@@ -52,20 +52,21 @@ RSpec.describe KlickmailApi::Connector do
       let(:response) do
         "<?xml version='1.0' encoding='utf-8'?>
           <result>
-            <sessid>sessid</sessid>
-            <session_name>sessionname</session_name>
+            <field1>field1</field1>
+            <field2>field2</field2>
+            <field3>field3</field3>
           </result>"
       end
       let(:status) { 200 }
-      let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
-      let(:data) { { 'username': 'username', 'password': 'password' } }
-      let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
+      let(:result) do
+        { "field1"=>"field1",
+          "field2"=>"field2",
+          "field3"=>"field3" }
+      end
 
-      subject { connector.request('account/login', :post, data) }
+      subject { client.index_fields }
 
       it { expect(subject['result']).to eq(result) }
     end
   end
 end
-
-
