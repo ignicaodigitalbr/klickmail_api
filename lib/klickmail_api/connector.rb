@@ -2,8 +2,6 @@ require 'httparty'
 
 module KlickmailApi
   class Connector
-    include HTTParty
-
     DEFAULT_SERVICE = 'http://www.klickmail.com.br/api'
 
     def initialize(service = DEFAULT_SERVICE)
@@ -13,24 +11,34 @@ module KlickmailApi
     def login(username, password)
       data = { username: username, password: password }
 
-      response = http_request('account/login', 'POST', data)
+      result = request('account/login', :post, data)
+      set_session(result)
 
-      return response['result']
+      result
+    end
+
+    def request(path, method = :get, data = {})
+      headers = {}
+      headers = request_header if @sessid
+
+      http_request(path, method, data, headers).parsed_response
     end
 
     private
 
-    def valid_login?(response)
-      response['result'] && response['result']['sessid']
-    end
-
     def set_session(data)
-      @sessionName = data['sessioName']
+      @session_name = data['session_name']
       @sessid = data['sessid']
     end
 
-    def http_request(path, method = 'GET', data = nil)
-      HTTParty.post("#{@service}/#{path}", body: data)
+    def request_header
+      { 'Cookie' => "#{@session_name}=#{@sessid}",
+        'Content-Type' => 'application/x-www-form-urlencoded'
+       }
+    end
+
+    def http_request(path, method, data, headers)
+      HTTParty.public_send(method, "#{@service}/#{path}", body: data, headers: headers)
     end
   end
 end

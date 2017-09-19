@@ -25,7 +25,7 @@ RSpec.describe KlickmailApi::Connector do
 
       subject { connector.login('username', 'password') }
 
-      it { is_expected.to eq(result) }
+      it { expect(subject['result']).to eq(result) }
     end
 
     context 'when the request is invalid' do
@@ -38,7 +38,32 @@ RSpec.describe KlickmailApi::Connector do
 
       subject { connector.login('wrong_username', 'wrong_password') }
 
-      it { is_expected.to eq(result) }
+      it { expect(subject['result']).to eq(result) }
+    end
+  end
+
+  describe '#request' do
+    before do
+      WebMock.stub_request(:post, "#{url}/account/login")
+        .to_return(status: status, body: response, headers: header)
+    end
+
+    context 'when the request is valid' do
+      let(:response) do
+        "<?xml version='1.0' encoding='utf-8'?>
+          <result>
+            <sessid>sessid</sessid>
+            <session_name>sessionname</session_name>
+          </result>"
+      end
+      let(:status) { 200 }
+      let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
+      let(:data) { { 'username': 'username', 'password': 'password' } }
+      let(:result) { {"sessid"=>"sessid", "session_name"=>"sessionname"} }
+
+      subject { connector.request('account/login', :post, data) }
+
+      it { expect(subject['result']).to eq(result) }
     end
   end
 end
