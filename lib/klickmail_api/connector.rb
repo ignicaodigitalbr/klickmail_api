@@ -38,7 +38,7 @@ module KlickmailApi
     end
 
     def http_request(path, method, data, headers)
-      HTTParty.public_send(method, "#{@service}/#{path}", body: data, headers: headers)
+      HTTParty.public_send(method, "#{@service}/#{path}", body: data, headers: headers, timeout: 3)
     end
   end
 end
